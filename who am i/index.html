@@ -1,0 +1,2676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>WHO AM I? | Find Your Chaotic Twin</title>
+  
+  <!-- Modern playful typography: Poppins & Nunito with fallback to system fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       1. GLOBAL THEME, RESETS & VARIABLES
+       ========================================================= */
+    :root {
+      --bg-dark: #0c091f;
+      --bg-card: rgba(26, 21, 56, 0.85);
+      --bg-card-hover: rgba(45, 35, 90, 0.95);
+      --purple: #7d3cfc;
+      --pink: #ff2a85;
+      --electric-blue: #00d2ff;
+      --yellow: #ffd000;
+      --orange: #ff6b35;
+      --white: #ffffff;
+      --text-muted: #c3b9eb;
+      --border-glow: rgba(125, 60, 252, 0.35);
+      --font-display: 'Fredoka', 'Poppins', system-ui, -apple-system, sans-serif;
+      --font-body: 'Nunito', 'Poppins', system-ui, -apple-system, sans-serif;
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 32px;
+      --shadow-glow: 0 0 35px rgba(255, 42, 133, 0.35), 0 0 15px rgba(125, 60, 252, 0.3);
+      --shadow-card: 0 16px 40px rgba(0, 0, 0, 0.45), 0 0 1px 1px rgba(255, 255, 255, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(125, 60, 252, 0.25) 0%, transparent 40%),
+        radial-gradient(circle at 85% 20%, rgba(255, 42, 133, 0.22) 0%, transparent 45%),
+        radial-gradient(circle at 50% 80%, rgba(0, 210, 255, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 80% 85%, rgba(255, 208, 0, 0.15) 0%, transparent 35%);
+      background-attachment: fixed;
+      color: var(--white);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Ambient floating stars / carnival sparkles in background */
+    .ambient-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* Main App Container */
+    #app-container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 760px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 24px 18px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      #app-container {
+        padding: 40px 24px;
+      }
+    }
+
+    /* View Screens Manager */
+    .screen {
+      display: none;
+      width: 100%;
+      animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* =========================================================
+       2. TYPOGRAPHY & BUTTONS
+       ========================================================= */
+    h1, h2, h3, .heading-font {
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      padding: 16px 32px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #ff2a85 0%, #ff6b35 50%, #ffd000 100%);
+      color: #0c091f;
+      box-shadow: 0 10px 30px rgba(255, 42, 133, 0.45);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 15px 35px rgba(255, 42, 133, 0.6);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--white);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .btn-accent {
+      background: linear-gradient(135deg, #7d3cfc 0%, #00d2ff 100%);
+      color: var(--white);
+      box-shadow: 0 8px 25px rgba(0, 210, 255, 0.35);
+    }
+
+    .btn-accent:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 30px rgba(0, 210, 255, 0.5);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      font-size: 0.95rem;
+      padding: 12px 22px;
+    }
+
+    .btn-outline:hover {
+      color: var(--white);
+      border-color: var(--electric-blue);
+      background: rgba(0, 210, 255, 0.08);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Badges & Chips */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    /* =========================================================
+       3. HOMEPAGE DESIGN
+       ========================================================= */
+    .home-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-lg);
+      padding: 38px 24px;
+      text-align: center;
+      box-shadow: var(--shadow-card);
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 600px) {
+      .home-card {
+        padding: 50px 42px;
+      }
+    }
+
+    .home-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(255, 42, 133, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .floating-banner-stickers {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 22px;
+      font-size: 2.2rem;
+      animation: floatSlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatSlow {
+      0% { transform: translateY(0px) rotate(-2deg); }
+      100% { transform: translateY(-8px) rotate(2deg); }
+    }
+
+    .logo-title {
+      font-size: 3.4rem;
+      line-height: 1.05;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ffffff 0%, #ffd000 35%, #ff2a85 75%, #00d2ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 15px rgba(255, 42, 133, 0.4));
+      text-shadow: 0 0 30px rgba(255, 42, 133, 0.3);
+    }
+
+    @media (min-width: 600px) {
+      .logo-title {
+        font-size: 4.5rem;
+      }
+    }
+
+    .logo-subtitle {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      color: var(--yellow);
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .tagline-text {
+      display: inline-block;
+      background: rgba(125, 60, 252, 0.25);
+      border: 1px dashed rgba(125, 60, 252, 0.6);
+      padding: 8px 20px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .home-description {
+      font-size: 1.12rem;
+      line-height: 1.6;
+      color: #e5e0ff;
+      max-width: 580px;
+      margin: 0 auto 32px auto;
+    }
+
+    .home-description p + p {
+      margin-top: 10px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    /* Vibe Highlights Grid (Clean, Mysterious, No Count Numbers) */
+    .carnival-stats-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 36px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 16px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .stat-num.c-pink { color: var(--pink); }
+    .stat-num.c-yellow { color: var(--yellow); }
+    .stat-num.c-blue { color: var(--electric-blue); }
+
+    .stat-label {
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .home-cta-group {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    /* =========================================================
+       4. QUIZ SCREEN & CONTROLS
+       ========================================================= */
+    .quiz-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-lg);
+      padding: 28px 20px;
+      box-shadow: var(--shadow-card);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (min-width: 600px) {
+      .quiz-card {
+        padding: 40px 36px;
+      }
+    }
+
+    .quiz-top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      gap: 12px;
+    }
+
+    .question-counter-badge {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--yellow);
+      background: rgba(255, 208, 0, 0.12);
+      border: 1px solid rgba(255, 208, 0, 0.4);
+      padding: 6px 14px;
+      border-radius: 999px;
+    }
+
+    /* Progress bar */
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 14.3%;
+      background: linear-gradient(90deg, #7d3cfc, #ff2a85, #ffd000);
+      border-radius: 999px;
+      transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 0 12px rgba(255, 42, 133, 0.8);
+    }
+
+    .question-title {
+      font-size: 1.4rem;
+      line-height: 1.35;
+      margin-bottom: 24px;
+      color: var(--white);
+      text-align: left;
+    }
+
+    @media (min-width: 600px) {
+      .question-title {
+        font-size: 1.65rem;
+      }
+    }
+
+    /* Answer Cards Grid */
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 30px;
+    }
+
+    .option-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      position: relative;
+    }
+
+    .option-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(0, 210, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .option-card.selected {
+      background: linear-gradient(135deg, rgba(125, 60, 252, 0.35) 0%, rgba(255, 42, 133, 0.25) 100%);
+      border-color: #ff2a85;
+      box-shadow: 0 0 20px rgba(255, 42, 133, 0.4), inset 0 0 10px rgba(255, 42, 133, 0.2);
+      transform: translateY(-2px) scale(1.01);
+    }
+
+    .option-letter-badge {
+      width: 42px;
+      height: 42px;
+      min-width: 42px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: var(--white);
+      transition: all 0.2s ease;
+    }
+
+    .option-card.selected .option-letter-badge {
+      background: #ff2a85;
+      color: var(--white);
+      box-shadow: 0 0 12px rgba(255, 42, 133, 0.8);
+      transform: scale(1.05);
+    }
+
+    .option-text {
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: #edeaff;
+      line-height: 1.45;
+      flex-grow: 1;
+    }
+
+    .option-card.selected .option-text {
+      color: var(--white);
+      font-weight: 700;
+    }
+
+    .option-radio-check {
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: transparent;
+      transition: all 0.2s ease;
+    }
+
+    .option-card.selected .option-radio-check {
+      background: #ff2a85;
+      border-color: #ff2a85;
+      color: var(--white);
+      box-shadow: 0 0 8px rgba(255, 42, 133, 0.6);
+    }
+
+    /* Quiz Navigation Bar */
+    .quiz-bottom-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding-top: 10px;
+    }
+
+    /* =========================================================
+       5. ALL ANSWERS LOCKED IN (COMPLETION PRE-REVEAL)
+       ========================================================= */
+    .locked-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-lg);
+      padding: 44px 24px;
+      text-align: center;
+      box-shadow: var(--shadow-card);
+      width: 100%;
+    }
+
+    .locked-icon-anim {
+      font-size: 4.5rem;
+      margin-bottom: 20px;
+      animation: pulseVibe 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseVibe {
+      0% { transform: scale(1) rotate(-5deg); filter: drop-shadow(0 0 10px rgba(255, 208, 0, 0.4)); }
+      100% { transform: scale(1.15) rotate(5deg); filter: drop-shadow(0 0 25px rgba(255, 42, 133, 0.8)); }
+    }
+
+    .locked-title {
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+      color: var(--yellow);
+    }
+
+    .locked-subtitle {
+      font-size: 1.2rem;
+      color: #edeaff;
+      margin-bottom: 32px;
+      font-weight: 600;
+    }
+
+    /* =========================================================
+       6. SUSPENSE / SCANNING ANIMATION SCREEN
+       ========================================================= */
+    .suspense-screen-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+      width: 100%;
+    }
+
+    .suspense-radar-wrapper {
+      position: relative;
+      width: 170px;
+      height: 170px;
+      margin-bottom: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .radar-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px dashed rgba(255, 42, 133, 0.4);
+      width: 100%;
+      height: 100%;
+      animation: spinClockwise 8s linear infinite;
+    }
+
+    .radar-ring.inner {
+      width: 70%;
+      height: 70%;
+      border: 2px solid rgba(0, 210, 255, 0.6);
+      animation: spinCounterClockwise 5s linear infinite;
+    }
+
+    .radar-center-icon {
+      font-size: 3.5rem;
+      z-index: 2;
+      animation: floatSlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes spinClockwise {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes spinCounterClockwise {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+
+    .suspense-status-box {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-md);
+      padding: 16px 28px;
+      min-width: 290px;
+      max-width: 90%;
+    }
+
+    .suspense-text {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--yellow);
+      letter-spacing: 1.5px;
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .suspense-loader-dots {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 14px;
+    }
+
+    .loader-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--pink);
+      animation: dotBounce 1.2s infinite ease-in-out both;
+    }
+
+    .loader-dot:nth-child(1) { animation-delay: -0.32s; }
+    .loader-dot:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes dotBounce {
+      0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    /* =========================================================
+       7. CHARACTER REVEAL SCREEN (SINGLE TWIN REVEAL)
+       ========================================================= */
+    .reveal-wrapper {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      animation: revealZoom 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes revealZoom {
+      0% {
+        opacity: 0;
+        transform: scale(0.85) rotateX(15deg);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) rotateX(0deg);
+      }
+    }
+
+    .character-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(25px);
+      border-radius: var(--radius-lg);
+      border: 2px solid rgba(255, 255, 255, 0.18);
+      padding: 34px 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(125, 60, 252, 0.3);
+      text-align: center;
+    }
+
+    @media (min-width: 600px) {
+      .character-card {
+        padding: 44px 38px;
+      }
+    }
+
+    .character-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: var(--card-accent-grad, linear-gradient(90deg, #ff2a85, #ffd000, #00d2ff));
+    }
+
+    .twin-header-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--yellow);
+    }
+
+    /* CSS Avatar Box */
+    .avatar-showcase-box {
+      width: 130px;
+      height: 130px;
+      margin: 0 auto 20px auto;
+      border-radius: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4.5rem;
+      background: var(--avatar-bg, linear-gradient(135deg, #ff2a85, #7d3cfc));
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 30px var(--avatar-glow, rgba(255, 42, 133, 0.5));
+      position: relative;
+      animation: floatSlow 3s ease-in-out infinite alternate;
+    }
+
+    .avatar-showcase-box .sparkle-decor {
+      position: absolute;
+      font-size: 1.4rem;
+    }
+    .sparkle-top-right { top: -8px; right: -8px; }
+    .sparkle-bottom-left { bottom: -8px; left: -8px; }
+
+    .character-name {
+      font-size: 2.5rem;
+      line-height: 1.1;
+      margin-bottom: 8px;
+      color: var(--white);
+    }
+
+    @media (min-width: 600px) {
+      .character-name {
+        font-size: 3rem;
+      }
+    }
+
+    .character-meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .category-chip {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .archetype-chip {
+      background: linear-gradient(135deg, rgba(125, 60, 252, 0.4), rgba(255, 42, 133, 0.4));
+      border: 1px solid rgba(255, 42, 133, 0.5);
+      color: var(--white);
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .compatibility-badge {
+      background: rgba(255, 208, 0, 0.15);
+      border: 1px solid rgba(255, 208, 0, 0.5);
+      color: var(--yellow);
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 800;
+    }
+
+    /* Famous scene POV Meme Reaction Box */
+    .famous-scene-reaction {
+      background: rgba(0, 0, 0, 0.35);
+      border-left: 4px solid var(--pink);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 18px 20px;
+      margin: 0 auto 20px auto;
+      text-align: left;
+      position: relative;
+    }
+
+    .reaction-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      color: var(--pink);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .reaction-caption-quote {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      line-height: 1.4;
+      color: var(--yellow);
+      font-weight: 700;
+    }
+
+    .character-description-text {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: #edeaff;
+      margin-bottom: 20px;
+      max-width: 620px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Personality Traits Chips */
+    .traits-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .trait-pill {
+      background: rgba(0, 210, 255, 0.12);
+      border: 1px solid rgba(0, 210, 255, 0.4);
+      color: var(--electric-blue);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    /* Dynamic Personalized Explanation Box */
+    .match-explanation-box {
+      background: rgba(125, 60, 252, 0.12);
+      border: 1px solid rgba(125, 60, 252, 0.4);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      margin: 0 auto 10px auto;
+      text-align: left;
+    }
+
+    .explanation-header {
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--electric-blue);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .explanation-body {
+      font-size: 0.98rem;
+      line-height: 1.5;
+      color: #e5e0ff;
+    }
+
+    /* Result Action Buttons */
+    .result-actions-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    @media (min-width: 540px) {
+      .result-actions-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* =========================================================
+       8. MODAL & TOAST STYLING
+       ========================================================= */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(12px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.25s ease forwards;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-lg);
+      max-width: 540px;
+      width: 100%;
+      padding: 32px 24px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: var(--white);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .modal-close-btn:hover {
+      background: rgba(255, 42, 133, 0.4);
+      transform: scale(1.1);
+    }
+
+    .modal-title {
+      font-size: 1.7rem;
+      margin-bottom: 16px;
+      color: var(--yellow);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .how-it-works-step {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      text-align: left;
+      align-items: flex-start;
+    }
+
+    .step-badge {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 800;
+      color: var(--white);
+    }
+
+    .step-content h4 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+      color: var(--white);
+    }
+
+    .step-content p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    /* Floating Toast */
+    .toast-popup {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(26, 21, 56, 0.95);
+      border: 1px solid var(--electric-blue);
+      color: var(--white);
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.95rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 210, 255, 0.4);
+      z-index: 2000;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .toast-popup.visible {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Carnival Booth Footer note */
+    .booth-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.4);
+      letter-spacing: 0.5px;
+    }
+
+    /* Hidden helper canvas for card generation */
+    #download-canvas {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient background canvas for floating carnival sparkles -->
+  <canvas id="ambient-canvas" class="ambient-canvas"></canvas>
+
+  <!-- Confetti canvas for reveal moments -->
+  <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+
+  <!-- Main Application Wrapper -->
+  <main id="app-container">
+
+    <!-- =========================================================
+         SCREEN 1: HOMEPAGE (WELCOME PAGE)
+         Clean, mysterious, no count numbers revealed
+         ========================================================= -->
+    <section id="screen-home" class="screen active">
+      <div class="home-card">
+        
+        <div class="floating-banner-stickers">
+          <span>🎪</span>
+          <span>✨</span>
+          <span>🎭</span>
+          <span>⚡</span>
+          <span>🍿</span>
+        </div>
+
+        <h1 class="logo-title">WHO AM I?</h1>
+        <div class="logo-subtitle">
+          <span>✨</span> FIND YOUR CHAOTIC TWIN <span>✨</span>
+        </div>
+
+        <div class="tagline-text">
+          Step into the carnival • Discover your chaotic twin
+        </div>
+
+        <div class="home-description">
+          <p>"Are you the main character, the chaotic friend, the mastermind, or the person who somehow turns everything into a meme?"</p>
+          <p>"Take the university carnival vibe check and meet your personality match."</p>
+        </div>
+
+        <!-- Carnival Vibe Highlights (Mysterious, no counts or reveal counts) -->
+        <div class="carnival-stats-bar">
+          <div class="stat-item">
+            <span class="stat-num c-pink">⚡</span>
+            <span class="stat-label">Pure Chaos</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num c-yellow">🎯</span>
+            <span class="stat-label">Accurate Vibe</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num c-blue">🔮</span>
+            <span class="stat-label">Epic Match</span>
+          </div>
+        </div>
+
+        <!-- Call to Action Buttons -->
+        <div class="home-cta-group">
+          <button id="btn-start-quiz" class="btn btn-primary">
+            <span>🔥 FIND MY TWIN</span>
+          </button>
+          <button id="btn-how-works" class="btn btn-secondary">
+            <span>❓ HOW DOES IT WORK?</span>
+          </button>
+        </div>
+
+      </div>
+
+      <div class="booth-footer">
+        🎪 University Carnival Edition • Ready for Phones, Tablets & Booth Screens
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SCREEN 2: QUIZ QUESTIONS (7 RELATABLE CAMPUS QUESTIONS)
+         ========================================================= -->
+    <section id="screen-quiz" class="screen">
+      <div class="quiz-card">
+        
+        <div class="quiz-top-nav">
+          <button id="btn-quiz-back" class="btn btn-outline" style="padding: 6px 14px; font-size: 0.85rem;">
+            ← Back
+          </button>
+          <div id="question-counter" class="question-counter-badge">
+            QUESTION 1 OF 7
+          </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="progress-track">
+          <div id="progress-bar-fill" class="progress-fill"></div>
+        </div>
+
+        <!-- Question Title -->
+        <h2 id="question-text" class="question-title">
+          Loading question...
+        </h2>
+
+        <!-- Answer Options Cards -->
+        <div id="options-container" class="options-grid">
+          <!-- Populated by JavaScript -->
+        </div>
+
+        <!-- Navigation Next/Continue -->
+        <div class="quiz-bottom-nav">
+          <span id="quiz-hint" style="font-size: 0.85rem; color: var(--text-muted);">
+            Pick the one that screams your vibe!
+          </span>
+          <button id="btn-quiz-continue" class="btn btn-primary" disabled>
+            <span>Continue →</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SCREEN 3: ALL ANSWERS LOCKED IN (COMPLETION PRE-REVEAL)
+         ========================================================= -->
+    <section id="screen-locked" class="screen">
+      <div class="locked-card">
+        <div class="locked-icon-anim">🎯</div>
+        <h2 class="locked-title heading-font">ALL ANSWERS LOCKED IN!</h2>
+        <p class="locked-subtitle">Your chaotic twin is ready.</p>
+
+        <div style="max-width: 340px; margin: 0 auto;">
+          <button id="btn-start-reveal" class="btn btn-primary" style="width: 100%; font-size: 1.25rem; padding: 18px 24px;">
+            <span>⚡ REVEAL MY TWIN</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SCREEN 4: SUSPENSE / SCANNING ANIMATION (2.5 SECONDS)
+         ========================================================= -->
+    <section id="screen-suspense" class="screen">
+      <div class="suspense-screen-content">
+        
+        <div class="suspense-radar-wrapper">
+          <div class="radar-ring"></div>
+          <div class="radar-ring inner"></div>
+          <div class="radar-center-icon">🔮</div>
+        </div>
+
+        <div class="suspense-status-box">
+          <div id="suspense-message" class="suspense-text">
+            ANALYZING YOUR VIBE...
+          </div>
+          <div class="suspense-loader-dots">
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SCREEN 5: RESULT REVEAL (ONE DEFINITIVE TWIN REVEAL)
+         ========================================================= -->
+    <section id="screen-result" class="screen">
+      <div class="reveal-wrapper">
+
+        <!-- PRIMARY CHARACTER RESULT CARD -->
+        <div id="primary-card" class="character-card">
+          
+          <div class="twin-header-pill">
+            <span>✨</span> YOUR PERSONALITY TWIN <span>✨</span>
+          </div>
+
+          <!-- Avatar Box -->
+          <div id="primary-avatar-box" class="avatar-showcase-box">
+            <span class="sparkle-decor sparkle-top-right">✨</span>
+            <span id="primary-avatar-emoji">😎</span>
+            <span class="sparkle-decor sparkle-bottom-left">⚡</span>
+          </div>
+
+          <!-- Character Name -->
+          <h2 id="primary-name" class="character-name heading-font">
+            Shinchan
+          </h2>
+
+          <!-- Meta bar (Category, Archetype, Match Badge) -->
+          <div class="character-meta-bar">
+            <span id="primary-category" class="category-chip">Cartoon Characters</span>
+            <span id="primary-archetype" class="archetype-chip">Chaotic Entertainer</span>
+            <span id="primary-compat" class="compatibility-badge">🔥 Vibe Match Confirmed</span>
+          </div>
+
+          <!-- Famous Scene Meme Reaction -->
+          <div class="famous-scene-reaction">
+            <div class="reaction-label">
+              <span>🎬</span> Famous Scene Reaction
+            </div>
+            <div id="primary-caption" class="reaction-caption-quote">
+              "POV: Your friends said behave normally."
+            </div>
+          </div>
+
+          <!-- Character Description -->
+          <p id="primary-description" class="character-description-text">
+            Your friends never know what you're going to do next. Honestly, neither do you.
+          </p>
+
+          <!-- Traits Chips -->
+          <div id="primary-traits" class="traits-container">
+            <!-- Populated via JS -->
+          </div>
+
+          <!-- Personalized Why You Matched Explanation -->
+          <div class="match-explanation-box">
+            <div class="explanation-header">
+              <span>💡</span> Why You Matched
+            </div>
+            <p id="primary-personalized-reason" class="explanation-body">
+              Analyzing your answers...
+            </p>
+          </div>
+
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="result-actions-grid">
+          <button id="btn-download-result" class="btn btn-accent">
+            <span>📥 DOWNLOAD MY RESULT</span>
+          </button>
+          <button id="btn-copy-result" class="btn btn-secondary">
+            <span>📋 COPY MY RESULT</span>
+          </button>
+          <button id="btn-play-again" class="btn btn-primary">
+            <span>🔄 PLAY AGAIN</span>
+          </button>
+          <button id="btn-friend-try" class="btn btn-secondary">
+            <span>👥 LET MY FRIEND TRY</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       MODAL: HOW DOES IT WORK?
+       Clean, friendly, no character counts revealed
+       ========================================================= -->
+  <div id="how-modal" class="modal-overlay">
+    <div class="modal-box">
+      <button id="modal-close" class="modal-close-btn" aria-label="Close modal">✕</button>
+      
+      <h3 class="modal-title heading-font">
+        <span>🎪</span> How Does It Work?
+      </h3>
+
+      <div class="how-it-works-step">
+        <div class="step-badge">1</div>
+        <div class="step-content">
+          <h4>Answer Quick Relatable Scenarios</h4>
+          <p>No boring exams or school forms! Choose what you would genuinely do in funny, high-stakes campus situations.</p>
+        </div>
+      </div>
+
+      <div class="how-it-works-step">
+        <div class="step-badge">2</div>
+        <div class="step-content">
+          <h4>Vibe & Personality Matching</h4>
+          <p>Our carnival algorithm checks your answers across chaotic energy, leadership, intellect, heart, wit, and composure.</p>
+        </div>
+      </div>
+
+      <div class="how-it-works-step">
+        <div class="step-badge">3</div>
+        <div class="step-content">
+          <h4>Meet Your Chaotic Twin</h4>
+          <p>Discover your true personality twin—complete with famous-scene reaction memes, traits, and personalized insights!</p>
+        </div>
+      </div>
+
+      <div style="margin-top: 24px; text-align: center;">
+        <button id="modal-start-btn" class="btn btn-primary" style="width: 100%;">
+          <span>LET'S GO! 🚀</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Popup -->
+  <div id="toast" class="toast-popup">
+    <span>✨</span> <span id="toast-msg">Result copied to clipboard!</span>
+  </div>
+
+  <!-- Hidden canvas for generating downloadable PNG result cards -->
+  <canvas id="download-canvas" width="800" height="1000"></canvas>
+
+  <!-- =========================================================
+       9. JAVASCRIPT LOGIC & 43 CHARACTER DATABASE
+       ========================================================= -->
+  <script>
+    /* =========================================================
+       DATABASE: ALL 43 CHARACTERS
+       ========================================================= */
+    const characters = [
+      {
+        id: 1,
+        name: "Nakul Dhull",
+        category: "Indian Internet Personalities",
+        archetype: "Comedy Legend",
+        traits: ["Relatable Humor","Desi Energy","Quick-Witted"],
+        caption: "POV: You made one Haryana reel and now the entire college group chat is quoting you.",
+        description: "You bring pure grassroots humor to every situation. While others stress over details, you drop one iconic line and make the whole room burst out laughing.",
+        weights: {"chaos":5,"leadership":3,"intellect":4,"heart":5,"drama":4,"energy":5,"wit":9,"chill":4},
+        fav: [1,3,1,1,1,1,1],
+        emoji: "🤠",
+        colors: ["#FF6B6B","#FFE66D"]
+      },
+      {
+        id: 2,
+        name: "Dolly Chai Wala",
+        category: "Indian Internet Personalities",
+        archetype: "Confident Icon",
+        traits: ["Unmatched Swag","Charismatic","Signature Style"],
+        caption: "POV: You entered the carnival and somehow became the celebrity.",
+        description: "You don't just attend an event; you make it an experience. With impeccable flair and magnetic confidence, you turn ordinary moments into viral internet moments.",
+        weights: {"chaos":5,"leadership":7,"intellect":3,"heart":4,"drama":8,"energy":7,"wit":6,"chill":3},
+        fav: [0,0,0,3,0,3,3],
+        emoji: "☕",
+        colors: ["#FF8008","#FFC837"]
+      },
+      {
+        id: 3,
+        name: "Deepak Kalal",
+        category: "Indian Internet Personalities",
+        archetype: "Unhinged Genius",
+        traits: ["Unfiltered","Wildly Unpredictable","Attention Magnet"],
+        caption: "POV: Nobody understood your vision, but you're still screaming at 100% volume.",
+        description: "Zero filters, absolute chaos, and 100% unapologetic energy. You live in your own timeline where every sentence is an exclamation and rules do not apply.",
+        weights: {"chaos":10,"leadership":2,"intellect":2,"heart":1,"drama":10,"energy":5,"wit":5,"chill":1},
+        fav: [3,3,3,3,3,3,3],
+        emoji: "📢",
+        colors: ["#F093FB","#F5576C"]
+      },
+      {
+        id: 4,
+        name: "IShowSpeed",
+        category: "Indian Internet Personalities",
+        archetype: "Chaotic Entertainer",
+        traits: ["Infinite Energy","Barking Passion","Over-The-Top"],
+        caption: "POV: Someone mentioned Cristiano Ronaldo in a 5-mile radius.",
+        description: "You operate at 150% volume at all times. When normal people whisper, you backflip over a table and scream into the sky with pure joyous enthusiasm.",
+        weights: {"chaos":9,"leadership":4,"intellect":1,"heart":3,"drama":6,"energy":10,"wit":6,"chill":1},
+        fav: [1,0,3,3,1,1,3],
+        emoji: "⚡",
+        colors: ["#FF416C","#8A2387"]
+      },
+      {
+        id: 5,
+        name: "Puneet Superstar",
+        category: "Indian Internet Personalities",
+        archetype: "Dramatic Legend",
+        traits: ["Lord Puneet Vibe","Raw Honesty","Viral Instinct"],
+        caption: "POV: Your life is not a movie. You are somehow making it one.",
+        description: "The people's icon. You don't need a script or a filter; the raw power of your dramatic sighs and passionate voice notes can bring down entire servers.",
+        weights: {"chaos":7,"leadership":3,"intellect":2,"heart":6,"drama":9,"energy":4,"wit":7,"chill":3},
+        fav: [1,3,1,3,3,3,3],
+        emoji: "👑",
+        colors: ["#11998E","#38EF7D"]
+      },
+      {
+        id: 6,
+        name: "The Great Khali",
+        category: "Indian Internet Personalities",
+        archetype: "Lazy but Legendary",
+        traits: ["Gentle Giant","Meme Sovereign","Effortless Dominance"],
+        caption: "POV: Sir, comment section mein cement ghula do please.",
+        description: "Massive presence without even trying. You can literally just sit quietly eating boiled eggs and the internet will create forty fan edits worshipping your aura.",
+        weights: {"chaos":2,"leadership":5,"intellect":2,"heart":6,"drama":3,"energy":4,"wit":5,"chill":9},
+        fav: [2,2,2,0,2,2,2],
+        emoji: "💪",
+        colors: ["#E65C00","#F9D423"]
+      },
+      {
+        id: 7,
+        name: "Ravi Kishan",
+        category: "Indian Internet Personalities",
+        archetype: "Comedy Legend",
+        traits: ["Cinematic Flair","Life is a Mela","Pure Desi Swag"],
+        caption: "POV: Zindagi jhand ba, tabo ghamand ba!",
+        description: "The philosopher of good vibes. No matter how chaotic things get, you face the universe with a cinematic dialogue and a grin that says 'everything is under control'.",
+        weights: {"chaos":5,"leadership":6,"intellect":4,"heart":5,"drama":7,"energy":4,"wit":8,"chill":5},
+        fav: [1,0,1,1,1,3,1],
+        emoji: "🎬",
+        colors: ["#FA709A","#FEE140"]
+      },
+      {
+        id: 8,
+        name: "Vada Pav Girl",
+        category: "Indian Internet Personalities",
+        archetype: "Calm and Composed",
+        traits: ["Hustle Mindset","Spotlight Ready","Defiant"],
+        caption: "POV: You came to sell snacks and ended up owning the headlines.",
+        description: "You turn everyday hustle into prime-time drama. Nobody can out-argue you when you're defending your territory, and you look sharp doing it.",
+        weights: {"chaos":4,"leadership":7,"intellect":5,"heart":3,"drama":7,"energy":6,"wit":4,"chill":4},
+        fav: [0,0,0,0,0,3,0],
+        emoji: "🍔",
+        colors: ["#F3904F","#3B4371"]
+      },
+      {
+        id: 9,
+        name: "Elvish Yadav",
+        category: "Indian Internet Personalities",
+        archetype: "Creative Dreamer",
+        traits: ["Systemmm Boss","Squad Leader","Bold Banter"],
+        caption: "POV: Systemmm hai bhai! Normal rules don't apply to this friend group.",
+        description: "Walking into any room with your crew like you own the building. You have a special talent for rallying people behind chaotic plans in seconds.",
+        weights: {"chaos":7,"leadership":8,"intellect":3,"heart":4,"drama":6,"energy":6,"wit":7,"chill":3},
+        fav: [0,0,0,3,0,1,3],
+        emoji: "🏎️",
+        colors: ["#4E54C8","#8F94FB"]
+      },
+      {
+        id: 10,
+        name: "Rakhi Sawant",
+        category: "Indian Internet Personalities",
+        archetype: "Dramatic Legend",
+        traits: ["Maximum Drama","Showstopper","Unapologetic Queen"],
+        caption: "POV: Drama levels detected. Normal conversations may now become headline-worthy.",
+        description: "The original drama pioneer. You could enter a room just to pick up a napkin and make it look like the climax of a three-hour Bollywood blockbuster.",
+        weights: {"chaos":8,"leadership":5,"intellect":1,"heart":4,"drama":10,"energy":5,"wit":7,"chill":1},
+        fav: [3,3,3,3,3,3,3],
+        emoji: "💎",
+        colors: ["#DA22FF","#9733EE"]
+      },
+      {
+        id: 11,
+        name: "Alia Bhatt",
+        category: "Indian Internet Personalities",
+        archetype: "Main Character Energy",
+        traits: ["Award Winning","Radiant Sparkle","Aesthetic Icon"],
+        caption: "POV: Nostril flair activated! You just delivered an emotional monologue at lunch.",
+        description: "You have effortless protagonist energy. Even when you're clumsy or making memes, everyone finds it charming and signs you up for the next big project.",
+        weights: {"chaos":3,"leadership":8,"intellect":5,"heart":7,"drama":6,"energy":5,"wit":5,"chill":3},
+        fav: [0,1,0,0,3,3,1],
+        emoji: "✨",
+        colors: ["#FF758C","#FF7EB3"]
+      },
+      {
+        id: 12,
+        name: "Urvashi Rautela",
+        category: "Indian Internet Personalities",
+        archetype: "Confident Icon",
+        traits: ["First Youngest Ever","Infinite Bio","Elite Glam"],
+        caption: "POV: First youngest Indian female to attend this carnival with 18 international titles.",
+        description: "Your achievements exist on another spiritual plane. You don't just introduce yourself; you recite a 12-page resume with diamonds in your eyes.",
+        weights: {"chaos":4,"leadership":9,"intellect":4,"heart":2,"drama":9,"energy":4,"wit":4,"chill":2},
+        fav: [0,0,0,3,0,3,0],
+        emoji: "👑",
+        colors: ["#F857A6","#FF5858"]
+      },
+      {
+        id: 13,
+        name: "Doraemon",
+        category: "Cartoon Characters",
+        archetype: "Loyal Protector",
+        traits: ["Pocket full of gadgets","Problem Solver","Dorayaki Lover"],
+        caption: "POV: Everyone's problems become your responsibility.",
+        description: "You're the reliable friend with an answer for everything. When your squad creates a disaster, you sigh, open your magic pouch, and save the day anyway.",
+        weights: {"chaos":2,"leadership":5,"intellect":7,"heart":9,"drama":2,"energy":4,"wit":4,"chill":4},
+        fav: [0,1,0,0,0,0,1],
+        emoji: "🐱",
+        colors: ["#00A8FF","#0097E6"]
+      },
+      {
+        id: 14,
+        name: "Shinchan",
+        category: "Cartoon Characters",
+        archetype: "Chaotic Entertainer",
+        traits: ["Mischievous","Unfiltered Laughs","Buri Buri Dancer"],
+        caption: "POV: Your friends said behave normally.",
+        description: "Your friends never know what you're going to do next. Honestly, neither do you. But one thing is guaranteed: boredom is completely illegal around you.",
+        weights: {"chaos":10,"leadership":3,"intellect":3,"heart":4,"drama":5,"energy":7,"wit":9,"chill":3},
+        fav: [1,3,3,3,1,1,3],
+        emoji: "🍑",
+        colors: ["#EA2027","#EE5A24"]
+      },
+      {
+        id: 15,
+        name: "Dekisugi",
+        category: "Cartoon Characters",
+        archetype: "Smart Strategist",
+        traits: ["Academic Royalty","Flawless Score","Calm Perfection"],
+        caption: "Somehow, you understood the assignment before it even existed.",
+        description: "Straight A's, immaculate manners, and you can cook, paint, and code in your sleep. Everyone admires you, even if they secretly wish you got one question wrong.",
+        weights: {"chaos":1,"leadership":5,"intellect":8,"heart":4,"drama":1,"energy":3,"wit":3,"chill":5},
+        fav: [0,1,2,2,2,0,0],
+        emoji: "📚",
+        colors: ["#0652DD","#12CBC4"]
+      },
+      {
+        id: 16,
+        name: "Masao",
+        category: "Cartoon Characters",
+        archetype: "Soft and Wholesome",
+        traits: ["Gentle Soul","Overthinker","Pure Heart"],
+        caption: "POV: A mild inconvenience occurred and now you are tearing up.",
+        description: "You feel every emotion at maximum intensity. You might get scared easily, but when your friends genuinely need you, you show up with pure loyalty.",
+        weights: {"chaos":1,"leadership":1,"intellect":3,"heart":8,"drama":5,"energy":2,"wit":3,"chill":6},
+        fav: [2,2,2,2,3,2,2],
+        emoji: "🥺",
+        colors: ["#A3CB38","#C4E538"]
+      },
+      {
+        id: 17,
+        name: "Nobita",
+        category: "Cartoon Characters",
+        archetype: "Lazy but Legendary",
+        traits: ["Relatable","Nap Champion","Hidden Sniper"],
+        caption: "POV: The deadline is tomorrow and you just remembered.",
+        description: "Master of putting off today's work until next year. Yet somehow, in the final five minutes, you pull off a miracle and make everyone root for you.",
+        weights: {"chaos":5,"leadership":2,"intellect":2,"heart":6,"drama":6,"energy":2,"wit":6,"chill":9},
+        fav: [3,2,2,1,3,2,2],
+        emoji: "🛌",
+        colors: ["#FFC312","#F79F1E"]
+      },
+      {
+        id: 18,
+        name: "Matsuzaka Ma'am",
+        category: "Cartoon Characters",
+        archetype: "Dramatic Legend",
+        traits: ["High Fashion","Secretly Broke","Desperate Romantic"],
+        caption: "POV: Wearing designer sunglasses while checking if you have 10 rupees for bus fare.",
+        description: "Extravagant exterior with a heart that's just looking for peace (and a wealthy partner). Your daily life is a continuous high-fashion romantic comedy.",
+        weights: {"chaos":5,"leadership":4,"intellect":3,"heart":3,"drama":9,"energy":3,"wit":5,"chill":3},
+        fav: [3,3,3,3,3,3,3],
+        emoji: "💅",
+        colors: ["#ED4C67","#B53471"]
+      },
+      {
+        id: 19,
+        name: "I-chan",
+        category: "Cartoon Characters",
+        archetype: "Creative Dreamer",
+        traits: ["Limousine Lifestyle","Love Visionary","Fancy Bodyguard Squad"],
+        caption: "POV: You fell for someone who doesn't even know what your trust fund is.",
+        description: "Born with luxury and endless drama. You treat everyday school life like a lavish fairy tale romance, complete with dramatic roses and string quartets.",
+        weights: {"chaos":4,"leadership":6,"intellect":4,"heart":6,"drama":8,"energy":3,"wit":5,"chill":3},
+        fav: [0,0,0,3,0,3,1],
+        emoji: "🌹",
+        colors: ["#FDA7DF","#D980FA"]
+      },
+      {
+        id: 20,
+        name: "Dora the Explorer",
+        category: "Cartoon Characters",
+        archetype: "Fearless Adventurer",
+        traits: ["Map Expert","Unstoppable Curiosity","Fourth-Wall Breaker"],
+        caption: "POV: Staring into the camera waiting for someone to point out the obvious.",
+        description: "You never back down from a journey! You ask the simplest questions with the boldest confidence and always carry everything in your trusty backpack.",
+        weights: {"chaos":3,"leadership":6,"intellect":5,"heart":6,"drama":2,"energy":8,"wit":4,"chill":2},
+        fav: [0,0,0,0,0,0,1],
+        emoji: "🎒",
+        colors: ["#F368E0","#FF9F43"]
+      },
+      {
+        id: 21,
+        name: "Mighty Raju",
+        category: "Cartoon Characters",
+        archetype: "Loyal Protector",
+        traits: ["Tech Wiz","Small but Feisty","Aryanagar Defender"],
+        caption: "POV: The villain thought size mattered until you booted up your rocket skates.",
+        description: "Pocket-sized champion with colossal courage. You combine brilliant inventions with brave heroics to protect your friends and city.",
+        weights: {"chaos":2,"leadership":6,"intellect":8,"heart":7,"drama":2,"energy":7,"wit":4,"chill":3},
+        fav: [0,1,0,0,0,0,1],
+        emoji: "🚀",
+        colors: ["#2E86DE","#54A0FF"]
+      },
+      {
+        id: 22,
+        name: "Chhota Bheem",
+        category: "Cartoon Characters",
+        archetype: "Fearless Adventurer",
+        traits: ["Laddoo Powered","Village Guardian","Superhuman Strength"],
+        caption: "POV: One warm laddoo and suddenly you're lifting an elephant.",
+        description: "Pure-hearted, strong, and always ready to fight bullies. All you need is good snacks and your squad to save the entire kingdom before sunset.",
+        weights: {"chaos":3,"leadership":7,"intellect":3,"heart":8,"drama":2,"energy":8,"wit":4,"chill":3},
+        fav: [0,0,0,0,0,0,1],
+        emoji: "🍬",
+        colors: ["#EE5253","#FF9F43"]
+      },
+      {
+        id: 23,
+        name: "SpongeBob SquarePants",
+        category: "Cartoon Characters",
+        archetype: "Chaotic Entertainer",
+        traits: ["Unmatched Optimism","Jellyfishing Master","Pure Joy"],
+        caption: "POV: You showed up on a Monday morning with 300% enthusiasm.",
+        description: "You find magic in flipping burgers and bubble blowing. Even when everyone around you is grumpy (looking at you, Squidward), your positivity is unstoppable.",
+        weights: {"chaos":8,"leadership":2,"intellect":2,"heart":8,"drama":4,"energy":7,"wit":8,"chill":2},
+        fav: [1,0,1,1,1,1,1],
+        emoji: "🧽",
+        colors: ["#FFD32A","#FFA801"]
+      },
+      {
+        id: 24,
+        name: "Oggy",
+        category: "Cartoon Characters",
+        archetype: "Quiet Observer",
+        traits: ["Peace Seeker","Flyswatter Specialist","Cat Nap Enthu"],
+        caption: "POV: You just wanted to watch TV in peace and three pests ruined your life.",
+        description: "You just want a clean house, sweet snacks, and quiet afternoon naps. But life constantly throws chaos your way, and you fight back with hilarious resilience.",
+        weights: {"chaos":3,"leadership":1,"intellect":4,"heart":6,"drama":4,"energy":3,"wit":5,"chill":9},
+        fav: [2,2,2,2,2,2,2],
+        emoji: "🛋️",
+        colors: ["#3867D6","#45AAF2"]
+      },
+      {
+        id: 25,
+        name: "Mr. Bean",
+        category: "Cartoon Characters",
+        archetype: "Comedy Legend",
+        traits: ["Accidentally Funny","Teddy Bestie","Zero Dialogue Genius"],
+        caption: "POV: You tried to act normal.",
+        description: "You don't need words to cause an international incident. You solve everyday problems with the most unnecessarily complicated, genius contraptions.",
+        weights: {"chaos":8,"leadership":2,"intellect":5,"heart":3,"drama":5,"energy":4,"wit":8,"chill":5},
+        fav: [1,3,3,3,1,1,3],
+        emoji: "🧸",
+        colors: ["#A55EEA","#4B6584"]
+      },
+      {
+        id: 26,
+        name: "Homer Simpson",
+        category: "Cartoon Characters",
+        archetype: "Lazy but Legendary",
+        traits: ["Donut Enthusiast","D'oh!","Couch Philosopher"],
+        caption: "POV: You found the easiest way to avoid any form of manual labor.",
+        description: "You have unlocked the secret to peaceful living: donuts, TV, and an extraordinary ability to survive your own hilarious blunders.",
+        weights: {"chaos":7,"leadership":1,"intellect":1,"heart":5,"drama":6,"energy":2,"wit":8,"chill":9},
+        fav: [2,2,2,1,1,2,2],
+        emoji: "🍩",
+        colors: ["#FED330","#FA8231"]
+      },
+      {
+        id: 27,
+        name: "Pikachu",
+        category: "Cartoon Characters",
+        archetype: "Soft and Wholesome",
+        traits: ["Electric Spark","Adorable Companion","Thunderbolt Power"],
+        caption: "POV: Cute and cuddly until someone disrespects your best friend.",
+        description: "Everyone's favorite little lightning bolt. Sweet, expressive, and loyal—but if anyone pushes you or your crew, you deliver a 100,000 volt shock.",
+        weights: {"chaos":3,"leadership":3,"intellect":3,"heart":9,"drama":2,"energy":7,"wit":5,"chill":4},
+        fav: [2,0,2,1,0,0,1],
+        emoji: "⚡",
+        colors: ["#F7B731","#EB3B5A"]
+      },
+      {
+        id: 28,
+        name: "Jigglypuff",
+        category: "Cartoon Characters",
+        archetype: "Soft and Wholesome",
+        traits: ["Lullaby Singer","Permanent Marker Menace","Sweet Diva"],
+        caption: "POV: Everyone fell asleep during your solo so you drew on their faces.",
+        description: "You love to perform and share your talents! Just don't dare fall asleep while you're talking, or you'll wake up with a sharpie mustache.",
+        weights: {"chaos":5,"leadership":3,"intellect":2,"heart":6,"drama":8,"energy":3,"wit":6,"chill":4},
+        fav: [3,3,1,3,3,3,3],
+        emoji: "🎤",
+        colors: ["#FC5C65","#FD9644"]
+      },
+      {
+        id: 29,
+        name: "Ladybug",
+        category: "Cartoon Characters",
+        archetype: "Curious Explorer",
+        traits: ["Lucky Charm","Secret Hero","Tactical Brain"],
+        caption: "POV: Fixing everyone's mess with a yo-yo and a polka dot suit.",
+        description: "Juggling everyday awkwardness with saving Paris every afternoon. You think fast on your feet and can turn any random object into a winning solution.",
+        weights: {"chaos":2,"leadership":6,"intellect":7,"heart":7,"drama":3,"energy":7,"wit":5,"chill":3},
+        fav: [0,1,0,2,0,0,0],
+        emoji: "🐞",
+        colors: ["#EB3B5A","#20BF6B"]
+      },
+      {
+        id: 30,
+        name: "Cat Noir",
+        category: "Cartoon Characters",
+        archetype: "Fearless Adventurer",
+        traits: ["Claw-some Puns","Playful Hero","Loyal Partner"],
+        caption: "POV: Flirting mid-battle while doing a 360 rooftop backflip.",
+        description: "Charming, punny, and always ready to jump into the danger zone with a grin. You bring swagger and lighthearted joy to high-stakes missions.",
+        weights: {"chaos":6,"leadership":5,"intellect":4,"heart":6,"drama":5,"energy":7,"wit":8,"chill":3},
+        fav: [1,0,1,1,1,1,1],
+        emoji: "🐾",
+        colors: ["#20BF6B","#2C3A47"]
+      },
+      {
+        id: 31,
+        name: "Hinata Hyuga",
+        category: "Anime Characters",
+        archetype: "Soft and Wholesome",
+        traits: ["Gentle Heart","Byakugan Focus","Unwavering Devotion"],
+        caption: "POV: Quietly cheering from the background while secretly having god-tier power.",
+        description: "Soft-spoken, humble, and endlessly kind. You may seem shy on the outside, but inside beats the heart of an unstoppable, brave warrior.",
+        weights: {"chaos":1,"leadership":2,"intellect":5,"heart":9,"drama":1,"energy":4,"wit":2,"chill":6},
+        fav: [2,2,2,2,2,2,2],
+        emoji: "🌸",
+        colors: ["#778BEB","#F8A5C2"]
+      },
+      {
+        id: 32,
+        name: "Naruto Uzumaki",
+        category: "Anime Characters",
+        archetype: "Main Character Energy",
+        traits: ["Believe It!","Ramen Fiend","Never Gives Up"],
+        caption: "POV: You gave a 10-minute speech and turned the villain into your best friend.",
+        description: "Unfiltered grit and boundless determination. You started as the class clown and proved everyone wrong through sheer stubborn heart and Talk-no-Jutsu.",
+        weights: {"chaos":6,"leadership":8,"intellect":3,"heart":7,"drama":5,"energy":9,"wit":6,"chill":1},
+        fav: [0,0,0,0,0,1,1],
+        emoji: "🍥",
+        colors: ["#E15F41","#F19066"]
+      },
+      {
+        id: 33,
+        name: "Satoru Gojo",
+        category: "Anime Characters",
+        archetype: "Confident Icon",
+        traits: ["Limitless Aura","Playful Menace","The Strongest"],
+        caption: "Confidence levels: unnecessarily legendary.",
+        description: "You walk into the room knowing you're untouchable. You casually eat sweets while casually flexing on the universe because frankly, nobody can rival your vibe.",
+        weights: {"chaos":6,"leadership":9,"intellect":6,"heart":4,"drama":6,"energy":7,"wit":7,"chill":4},
+        fav: [0,3,0,3,1,1,3],
+        emoji: "🕶️",
+        colors: ["#3DC1D3","#596275"]
+      },
+      {
+        id: 34,
+        name: "Levi Ackerman",
+        category: "Anime Characters",
+        archetype: "Smart Strategist",
+        traits: ["Clean Freak","Zero Hesitation","Humanity's Strongest"],
+        caption: "POV: There is one speck of dust on the table and you take it personally.",
+        description: "Cool, calm, sharp as a razor. You don't waste words or energy. You demand cleanliness, precision, and peak results from everyone around you.",
+        weights: {"chaos":1,"leadership":7,"intellect":7,"heart":4,"drama":1,"energy":8,"wit":3,"chill":5},
+        fav: [0,1,0,0,2,0,0],
+        emoji: "⚔️",
+        colors: ["#303952","#596275"]
+      },
+      {
+        id: 35,
+        name: "Light Yagami",
+        category: "Anime Characters",
+        archetype: "Mysterious Mastermind",
+        traits: ["Calculated","Potato Chip Enthusiast","All According to Plan"],
+        caption: "POV: You take a potato chip... AND EAT IT with theatrical intensity.",
+        description: "Your brain is playing 4D chess while everyone else is playing tic-tac-toe. You have a backup plan for your backup plan's secret contingency.",
+        weights: {"chaos":2,"leadership":7,"intellect":9,"heart":1,"drama":7,"energy":2,"wit":4,"chill":4},
+        fav: [0,1,0,2,2,0,0],
+        emoji: "📓",
+        colors: ["#574B90","#303952"]
+      },
+      {
+        id: 36,
+        name: "Anya Forger",
+        category: "Anime Characters",
+        archetype: "Curious Explorer",
+        traits: ["Mind Reader","Waku Waku","Smug Peanuts Lover"],
+        caption: "Your curiosity is dangerous and your expressions are priceless.",
+        description: "Armed with mind-reading abilities, a love for peanuts, and the most iconic smug face in history. You secretly know everything happening around you.",
+        weights: {"chaos":7,"leadership":2,"intellect":5,"heart":6,"drama":6,"energy":5,"wit":7,"chill":4},
+        fav: [1,3,3,3,1,1,3],
+        emoji: "🥜",
+        colors: ["#F78FB3","#F5CD79"]
+      },
+      {
+        id: 37,
+        name: "Gamora",
+        category: "Marvel Characters",
+        archetype: "Quiet Observer",
+        traits: ["Deadliest Warrior","Sensible Sibling","Tolerates Idiots"],
+        caption: "POV: You are surrounded by cosmic clowns and must keep them all alive.",
+        description: "Fierce, lethal, and remarkably grounded. While your friends make reckless decisions and dance battles, you roll your eyes and save the galaxy anyway.",
+        weights: {"chaos":1,"leadership":5,"intellect":7,"heart":5,"drama":2,"energy":7,"wit":3,"chill":6},
+        fav: [2,1,2,2,2,2,0],
+        emoji: "🗡️",
+        colors: ["#05C46B","#0BE881"]
+      },
+      {
+        id: 38,
+        name: "Wanda Maximoff",
+        category: "Marvel Characters",
+        archetype: "Mysterious Mastermind",
+        traits: ["Chaos Magic","Reality Warper","Intense Passion"],
+        caption: "POV: You rewrote the neighborhood reality because you were having a bad day.",
+        description: "Immense, mystical power wrapped in intense emotion. When things don't go your way, you don't compromise—you rewrite the fabric of reality itself.",
+        weights: {"chaos":5,"leadership":6,"intellect":6,"heart":5,"drama":9,"energy":4,"wit":3,"chill":2},
+        fav: [3,3,3,3,3,3,3],
+        emoji: "🔮",
+        colors: ["#FF3F34","#B33939"]
+      },
+      {
+        id: 39,
+        name: "Black Widow / Natasha Romanoff",
+        category: "Marvel Characters",
+        archetype: "Smart Strategist",
+        traits: ["Master Spy","No-Fluff Pragmatist","Found Family Anchor"],
+        caption: "POV: You read through everyone's secrets five minutes before saying hello.",
+        description: "Sleek, sharp, and deadly clever. You have no superpowers, yet gods and super soldiers look to you when the tactical battle plan needs executing.",
+        weights: {"chaos":2,"leadership":6,"intellect":8,"heart":5,"drama":2,"energy":7,"wit":5,"chill":4},
+        fav: [0,1,2,2,2,0,0],
+        emoji: "🕷️",
+        colors: ["#1E272E","#D63031"]
+      },
+      {
+        id: 40,
+        name: "Spider-Man",
+        category: "Marvel Characters",
+        archetype: "Chaotic Entertainer",
+        traits: ["Witty Banter","Friendly Neighborhood","Great Responsibility"],
+        caption: "POV: You said yes to one small responsibility.",
+        description: "You never stop joking even when suspended upside down off a skyscraper. Big heart, brilliant mind, and always trying your best to do the right thing.",
+        weights: {"chaos":6,"leadership":5,"intellect":6,"heart":8,"drama":3,"energy":7,"wit":8,"chill":2},
+        fav: [1,0,1,1,1,1,1],
+        emoji: "🕸️",
+        colors: ["#FF3838","#17c0eb"]
+      },
+      {
+        id: 41,
+        name: "Captain America",
+        category: "Marvel Characters",
+        archetype: "Loyal Protector",
+        traits: ["Can Do This All Day","Moral Compass","Vibranium Shield"],
+        caption: "POV: Someone cut the line at the carnival and you gave them a polite patriotic speech.",
+        description: "Honorable to the bone. You stand up for the little guy, believe in second chances, and will stand your ground against anything that threatens your team.",
+        weights: {"chaos":1,"leadership":9,"intellect":5,"heart":8,"drama":2,"energy":7,"wit":3,"chill":3},
+        fav: [0,1,0,0,0,0,0],
+        emoji: "🛡️",
+        colors: ["#185a9d","#43cea2"]
+      },
+      {
+        id: 42,
+        name: "Doctor Strange",
+        category: "Marvel Characters",
+        archetype: "Unhinged Genius",
+        traits: ["Mystic Sorcerer","Cape with Personality","14 Million Outcomes"],
+        caption: "POV: You calculated 14,000,605 outcomes and this was the only winning one.",
+        description: "Ego the size of a multiverse, backed up by the skills to match. You bend time and space before breakfast and your enchanted cloak has better comedic timing than most.",
+        weights: {"chaos":4,"leadership":7,"intellect":8,"heart":3,"drama":5,"energy":5,"wit":6,"chill":4},
+        fav: [0,1,0,2,2,0,0],
+        emoji: "⏳",
+        colors: ["#cd84f1","#4b4b4b"]
+      },
+      {
+        id: 43,
+        name: "Thor",
+        category: "Marvel Characters",
+        archetype: "Calm and Composed",
+        traits: ["God of Thunder","Booming Laughter","Hammer Time"],
+        caption: "POV: You shattered a table by casually setting down your drink. 'ANOTHER!'",
+        description: "Brimming with thunderous joy and godlike confidence. Even when everything goes up in cosmic flames, you summon lightning, laugh heartily, and charge in.",
+        weights: {"chaos":5,"leadership":7,"intellect":2,"heart":6,"drama":5,"energy":8,"wit":6,"chill":4},
+        fav: [0,0,0,0,0,1,1],
+        emoji: "⚡",
+        colors: ["#ff9f1a","#7158e2"]
+      }
+    ];
+
+    /* =========================================================
+       QUIZ QUESTIONS: EXACTLY 7 SPECIFIC CAMPUS SCENARIOS
+       ========================================================= */
+    const dimensions = ['chaos', 'leadership', 'intellect', 'heart', 'drama', 'energy', 'wit', 'chill'];
+
+    const questions = [
+      // Q1
+      {
+        title: "Your friends are making plans. You are the one who...",
+        options: [
+          { letter: "A", text: "Makes the plan.", weights: {"leadership":4,"intellect":2,"energy":1} },
+          { letter: "B", text: "Makes everyone laugh.", weights: {"wit":4,"chaos":2,"heart":1} },
+          { letter: "C", text: "Goes with the flow.", weights: {"chill":4,"heart":2} },
+          { letter: "D", text: "Takes forever to decide.", weights: {"drama":3,"chill":2,"chaos":1} }
+        ]
+      },
+      // Q2
+      {
+        title: "When someone says \"Let's do something crazy!\" you...",
+        options: [
+          { letter: "A", text: "Say \"I'm in!\"", weights: {"energy":4,"chaos":3,"leadership":1} },
+          { letter: "B", text: "Ask what the plan is.", weights: {"intellect":4,"leadership":2,"chill":1} },
+          { letter: "C", text: "Laugh but stay out of it.", weights: {"chill":4,"heart":2,"intellect":1} },
+          { letter: "D", text: "Come up with something crazier.", weights: {"chaos":4,"wit":3,"drama":2} }
+        ]
+      },
+      // Q3
+      {
+        title: "In a group, you are usually...",
+        options: [
+          { letter: "A", text: "The leader.", weights: {"leadership":5,"energy":2} },
+          { letter: "B", text: "The entertainer.", weights: {"wit":5,"chaos":2,"drama":1} },
+          { letter: "C", text: "The quiet observer.", weights: {"chill":4,"intellect":3} },
+          { letter: "D", text: "The unpredictable one.", weights: {"chaos":5,"drama":2,"wit":1} }
+        ]
+      },
+      // Q4
+      {
+        title: "Your biggest strength is...",
+        options: [
+          { letter: "A", text: "Getting things done.", weights: {"leadership":4,"energy":3,"intellect":1} },
+          { letter: "B", text: "Making people laugh.", weights: {"wit":5,"heart":2} },
+          { letter: "C", text: "Thinking things through.", weights: {"intellect":5,"chill":2} },
+          { letter: "D", text: "Being full of surprises.", weights: {"chaos":4,"drama":3,"wit":1} }
+        ]
+      },
+      // Q5
+      {
+        title: "When things go wrong, you...",
+        options: [
+          { letter: "A", text: "Take charge.", weights: {"leadership":5,"heart":2} },
+          { letter: "B", text: "Make a joke.", weights: {"wit":4,"chaos":2,"chill":1} },
+          { letter: "C", text: "Stay calm and think.", weights: {"intellect":4,"chill":4} },
+          { letter: "D", text: "Panic for a moment, then figure it out.", weights: {"drama":3,"heart":3,"energy":2} }
+        ]
+      },
+      // Q6
+      {
+        title: "Your friends would describe you as...",
+        options: [
+          { letter: "A", text: "Responsible.", weights: {"leadership":3,"heart":4,"intellect":2} },
+          { letter: "B", text: "Funny.", weights: {"wit":5,"chaos":2} },
+          { letter: "C", text: "Chill.", weights: {"chill":5,"heart":2} },
+          { letter: "D", text: "Dramatic.", weights: {"drama":5,"chaos":2} }
+        ]
+      },
+      // Q7
+      {
+        title: "Your ideal college day is...",
+        options: [
+          { letter: "A", text: "Getting everything done.", weights: {"leadership":4,"intellect":3,"energy":1} },
+          { letter: "B", text: "Having fun with friends.", weights: {"heart":4,"energy":3,"wit":2} },
+          { letter: "C", text: "A peaceful day with no stress.", weights: {"chill":5,"heart":2} },
+          { letter: "D", text: "Something unexpected happening.", weights: {"chaos":4,"drama":3,"energy":2} }
+        ]
+      }
+    ];
+
+    /* =========================================================
+       APP STATE
+       ========================================================= */
+    const state = {
+      currentQuestionIndex: 0,
+      userAnswers: [null, null, null, null, null, null, null],
+      userVector: null,
+      primaryResult: null,
+      primaryScore: 0
+    };
+
+    /* =========================================================
+       DOM ELEMENTS
+       ========================================================= */
+    const screens = {
+      home: document.getElementById('screen-home'),
+      quiz: document.getElementById('screen-quiz'),
+      locked: document.getElementById('screen-locked'),
+      suspense: document.getElementById('screen-suspense'),
+      result: document.getElementById('screen-result')
+    };
+
+    const questionCounterEl = document.getElementById('question-counter');
+    const progressBarFill = document.getElementById('progress-bar-fill');
+    const questionTextEl = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const btnQuizBack = document.getElementById('btn-quiz-back');
+    const btnQuizContinue = document.getElementById('btn-quiz-continue');
+
+    const suspenseMessageEl = document.getElementById('suspense-message');
+    const howModal = document.getElementById('how-modal');
+    const toastEl = document.getElementById('toast');
+    const toastMsgEl = document.getElementById('toast-msg');
+
+    /* =========================================================
+       SCREEN NAVIGATION CONTROLLER
+       ========================================================= */
+    function showScreen(screenKey) {
+      Object.keys(screens).forEach(key => {
+        screens[key].classList.remove('active');
+      });
+      screens[screenKey].classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* =========================================================
+       QUIZ LOGIC
+       ========================================================= */
+    function startQuiz() {
+      state.currentQuestionIndex = 0;
+      state.userAnswers = [null, null, null, null, null, null, null];
+      renderQuestion();
+      showScreen('quiz');
+    }
+
+    function renderQuestion() {
+      const qIndex = state.currentQuestionIndex;
+      const qData = questions[qIndex];
+
+      // Update question counter & progress bar
+      questionCounterEl.textContent = `QUESTION ${qIndex + 1} OF 7`;
+      const progressPercent = ((qIndex + 1) / 7) * 100;
+      progressBarFill.style.width = `${progressPercent}%`;
+
+      // Update Back Button visibility
+      if (qIndex === 0) {
+        btnQuizBack.style.visibility = 'hidden';
+      } else {
+        btnQuizBack.style.visibility = 'visible';
+      }
+
+      // Update Question Title
+      questionTextEl.textContent = qData.title;
+
+      // Render Answer Options
+      optionsContainer.innerHTML = '';
+      const currentSelected = state.userAnswers[qIndex];
+
+      qData.options.forEach((opt, optIndex) => {
+        const isSelected = currentSelected === optIndex;
+        const card = document.createElement('div');
+        card.className = `option-card ${isSelected ? 'selected' : ''}`;
+        card.innerHTML = `
+          <div class="option-letter-badge">${opt.letter}</div>
+          <div class="option-text">${opt.text}</div>
+          <div class="option-radio-check">✓</div>
+        `;
+
+        card.addEventListener('click', () => {
+          selectOption(optIndex);
+        });
+
+        optionsContainer.appendChild(card);
+      });
+
+      // Update Continue Button State
+      btnQuizContinue.disabled = (currentSelected === null);
+    }
+
+    function selectOption(optionIndex) {
+      state.userAnswers[state.currentQuestionIndex] = optionIndex;
+      
+      // Update UI cards
+      const cards = optionsContainer.querySelectorAll('.option-card');
+      cards.forEach((card, idx) => {
+        if (idx === optionIndex) {
+          card.classList.add('selected');
+        } else {
+          card.classList.remove('selected');
+        }
+      });
+
+      // Enable Continue
+      btnQuizContinue.disabled = false;
+    }
+
+    function goNextQuestion() {
+      if (state.userAnswers[state.currentQuestionIndex] === null) return;
+
+      if (state.currentQuestionIndex < 6) {
+        state.currentQuestionIndex++;
+        renderQuestion();
+      } else {
+        // All 7 questions answered -> show "ALL ANSWERS LOCKED IN" screen
+        showScreen('locked');
+      }
+    }
+
+    function goPreviousQuestion() {
+      if (state.currentQuestionIndex > 0) {
+        state.currentQuestionIndex--;
+        renderQuestion();
+      }
+    }
+
+    /* =========================================================
+       DETERMINISTIC PERSONALITY MATCHING
+       ========================================================= */
+    function calculateResults() {
+      const answers = state.userAnswers;
+
+      // 1. Build User Profile Vector from all 7 answers
+      const userVec = { chaos: 0, leadership: 0, intellect: 0, heart: 0, drama: 0, energy: 0, wit: 0, chill: 0 };
+      for (let q = 0; q < 7; q++) {
+        const choiceIdx = answers[q];
+        const optWeights = questions[q].options[choiceIdx].weights;
+        for (const dim of dimensions) {
+          if (optWeights[dim]) userVec[dim] += optWeights[dim];
+        }
+      }
+      state.userVector = userVec;
+
+      // Deterministic signature hash from answers for tie-breaking
+      const ansHash = (answers[0] * 3 + answers[1] * 7 + answers[2] * 11 + answers[3] * 13 + answers[4] * 17 + answers[5] * 19 + answers[6] * 23);
+
+      // 2. Score all 43 characters
+      const scores = characters.map(char => {
+        let dot = 0;
+        let uMag = 0;
+        let cMag = 0;
+        for (const dim of dimensions) {
+          const uVal = userVec[dim] || 0;
+          const cVal = char.weights[dim] || 0;
+          dot += uVal * cVal;
+          uMag += uVal * uVal;
+          cMag += cVal * cVal;
+        }
+        const cosine = dot / (Math.sqrt(uMag) * Math.sqrt(cMag) || 1);
+
+        // Character preferred choice affinity bonus
+        let favBonus = 0;
+        for (let q = 0; q < 7; q++) {
+          if (answers[q] === char.fav[q]) favBonus += 0.055;
+        }
+
+        // Deterministic subtle tie-breaker
+        const hashBonus = ((char.id * 19 + ansHash) % 100) * 0.0003;
+        const totalScore = cosine * 0.72 + favBonus + hashBonus;
+
+        return { char, score: totalScore };
+      });
+
+      // Sort descending
+      scores.sort((a, b) => b.score - a.score);
+
+      // Single definitive match
+      state.primaryResult = scores[0].char;
+      state.primaryScore = scores[0].score;
+    }
+
+    /* Dynamic personalized explanation based on user's actual top behavioral traits */
+    function generatePersonalizedExplanation(userVec, char) {
+      const sortedTraits = Object.entries(userVec).sort((a, b) => b[1] - a[1]);
+      const top1 = sortedTraits[0][0];
+      const top2 = sortedTraits[1][0];
+
+      const traitPhrases = {
+        chaos: "unpredictable, rule-bending chaos",
+        leadership: "natural squad-leader authority",
+        intellect: "sharp strategic calculation",
+        heart: "protective loyalty and genuine warmth",
+        drama: "theatrical showstopper presence",
+        energy: "boundless hype and adventurous drive",
+        wit: "quick-fire humor and comic timing",
+        chill: "zen-level unbothered composure"
+      };
+
+      const p1 = traitPhrases[top1] || "high-voltage charisma";
+      const p2 = traitPhrases[top2] || "signature festival energy";
+
+      return `Your answers showed that you naturally bring ${p1} and ${p2}. When plans are made or things get crazy, you react just like ${char.name}—bringing your own signature energy to the group!`;
+    }
+
+    /* =========================================================
+       SUSPENSE SEQUENCE & REVEAL (2.5 SECONDS)
+       ========================================================= */
+    function triggerSuspenseAndReveal() {
+      calculateResults();
+      showScreen('suspense');
+
+      const messages = [
+        "ANALYZING YOUR VIBE...",
+        "DETECTING CHAOS...",
+        "CHECKING MAIN CHARACTER ENERGY...",
+        "SCANNING YOUR CARTOON UNIVERSE...",
+        "YOUR TWIN HAS BEEN FOUND!"
+      ];
+
+      let msgIndex = 0;
+      suspenseMessageEl.textContent = messages[0];
+
+      const interval = setInterval(() => {
+        msgIndex++;
+        if (msgIndex < messages.length) {
+          suspenseMessageEl.textContent = messages[msgIndex];
+        } else {
+          clearInterval(interval);
+          setTimeout(() => {
+            renderResultScreen();
+            showScreen('result');
+            triggerConfetti();
+          }, 450);
+        }
+      }, 500);
+    }
+
+    /* =========================================================
+       RENDER RESULT SCREEN (SINGLE DEFINITIVE MATCH)
+       ========================================================= */
+    function renderResultScreen() {
+      const primary = state.primaryResult;
+
+      // Primary Card Elements
+      const primaryCard = document.getElementById('primary-card');
+      const primaryAvatarBox = document.getElementById('primary-avatar-box');
+      const primaryAvatarEmoji = document.getElementById('primary-avatar-emoji');
+      const primaryName = document.getElementById('primary-name');
+      const primaryCategory = document.getElementById('primary-category');
+      const primaryArchetype = document.getElementById('primary-archetype');
+      const primaryCaption = document.getElementById('primary-caption');
+      const primaryDescription = document.getElementById('primary-description');
+      const primaryTraits = document.getElementById('primary-traits');
+      const primaryPersonalizedReason = document.getElementById('primary-personalized-reason');
+
+      // Colors & Styling
+      const grad = `linear-gradient(135deg, ${primary.colors[0]}, ${primary.colors[1]})`;
+      primaryCard.style.setProperty('--card-accent-grad', grad);
+      primaryAvatarBox.style.setProperty('--avatar-bg', grad);
+      primaryAvatarBox.style.setProperty('--avatar-glow', primary.colors[0] + '88');
+
+      primaryAvatarEmoji.textContent = primary.emoji;
+      primaryName.textContent = primary.name;
+      primaryCategory.textContent = primary.category;
+      primaryArchetype.textContent = primary.archetype;
+      primaryCaption.textContent = primary.caption;
+      primaryDescription.textContent = primary.description;
+
+      // Traits
+      primaryTraits.innerHTML = '';
+      primary.traits.forEach(trait => {
+        const pill = document.createElement('span');
+        pill.className = 'trait-pill';
+        pill.textContent = `✦ ${trait}`;
+        primaryTraits.appendChild(pill);
+      });
+
+      // Personalized explanation
+      if (state.userVector) {
+        primaryPersonalizedReason.textContent = generatePersonalizedExplanation(state.userVector, primary);
+      }
+    }
+
+    /* =========================================================
+       RESULT CARD DOWNLOAD (CANVAS-BASED PNG FALLBACK)
+       ========================================================= */
+    function downloadResultCard() {
+      const char = state.primaryResult;
+      if (!char) return;
+
+      const canvas = document.getElementById('download-canvas');
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width;
+      const height = canvas.height;
+
+      // 1. Background gradient
+      const bgGrad = ctx.createLinearGradient(0, 0, width, height);
+      bgGrad.addColorStop(0, '#0f0c29');
+      bgGrad.addColorStop(0.5, '#302b63');
+      bgGrad.addColorStop(1, '#24243e');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, width, height);
+
+      // Carnival decorative border
+      ctx.strokeStyle = '#ffd000';
+      ctx.lineWidth = 10;
+      ctx.strokeRect(20, 20, width - 40, height - 40);
+
+      ctx.strokeStyle = 'rgba(255, 42, 133, 0.6)';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(30, 30, width - 60, height - 60);
+
+      // Top Tag
+      ctx.fillStyle = '#ffd000';
+      ctx.font = 'bold 24px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('🎪 UNIVERSITY CARNIVAL • WHO AM I? 🎪', width / 2, 80);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 36px system-ui, sans-serif';
+      ctx.fillText('YOUR PERSONALITY TWIN', width / 2, 130);
+
+      // Emoji Avatar circle
+      const avatarX = width / 2;
+      const avatarY = 240;
+      const avatarRadius = 75;
+
+      const avatarGrad = ctx.createLinearGradient(avatarX - avatarRadius, avatarY - avatarRadius, avatarX + avatarRadius, avatarY + avatarRadius);
+      avatarGrad.addColorStop(0, char.colors[0]);
+      avatarGrad.addColorStop(1, char.colors[1]);
+      ctx.beginPath();
+      ctx.arc(avatarX, avatarY, avatarRadius, 0, Math.PI * 2);
+      ctx.fillStyle = avatarGrad;
+      ctx.fill();
+      ctx.lineWidth = 6;
+      ctx.strokeStyle = '#ffffff';
+      ctx.stroke();
+
+      // Emoji
+      ctx.font = '72px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(char.emoji, avatarX, avatarY + 4);
+
+      // Character Name
+      ctx.textBaseline = 'alphabetic';
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 46px system-ui, sans-serif';
+      ctx.fillText(char.name, width / 2, 375);
+
+      // Archetype & Category
+      ctx.fillStyle = '#ff2a85';
+      ctx.font = 'bold 28px system-ui, sans-serif';
+      ctx.fillText(char.archetype.toUpperCase(), width / 2, 420);
+
+      ctx.fillStyle = '#00d2ff';
+      ctx.font = 'bold 22px system-ui, sans-serif';
+      ctx.fillText(`${char.category} • True Match`, width / 2, 458);
+
+      // Meme Caption box
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+      ctx.fillRect(60, 495, width - 120, 130);
+      ctx.strokeStyle = '#ff2a85';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(60, 495, width - 120, 130);
+
+      ctx.fillStyle = '#ffd000';
+      ctx.font = 'italic bold 24px system-ui, sans-serif';
+      wrapText(ctx, `"${char.caption}"`, width / 2, 545, width - 160, 32);
+
+      // Description
+      ctx.fillStyle = '#e0dbff';
+      ctx.font = '22px system-ui, sans-serif';
+      wrapText(ctx, char.description, width / 2, 670, width - 140, 30);
+
+      // Traits chips
+      const traitsText = char.traits.map(t => `✦ ${t}`).join('   •   ');
+      ctx.fillStyle = '#00d2ff';
+      ctx.font = 'bold 22px system-ui, sans-serif';
+      ctx.fillText(traitsText, width / 2, 850);
+
+      // Footer
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+      ctx.font = '18px system-ui, sans-serif';
+      ctx.fillText('Find your chaotic twin at the University Carnival!', width / 2, 930);
+
+      // Download trigger
+      try {
+        const link = document.createElement('a');
+        link.download = `who-am-i-${char.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        showToast("Result card downloaded! 📸");
+      } catch (err) {
+        showToast("Couldn't auto-download image, use Copy Result! 📋");
+      }
+    }
+
+    // Canvas text wrap helper
+    function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+      const words = text.split(' ');
+      let line = '';
+      let curY = y;
+
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = ctx.measureText(testLine);
+        const testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+          ctx.fillText(line.trim(), x, curY);
+          line = words[n] + ' ';
+          curY += lineHeight;
+        } else {
+          line = testLine;
+        }
+      }
+      ctx.fillText(line.trim(), x, curY);
+    }
+
+    /* =========================================================
+       COPY RESULT TO CLIPBOARD
+       ========================================================= */
+    function copyResultToClipboard() {
+      const char = state.primaryResult;
+      if (!char) return;
+
+      const text = `🎉 I took the "WHO AM I?" quiz at the University Carnival!\n\n` +
+        `👤 My Chaotic Twin: ${char.name} (${char.archetype})\n` +
+        `🎬 Famous Scene: "${char.caption}"\n\n` +
+        `Find your chaotic twin at the carnival! 🎪✨`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast("Copied result to clipboard! 📋✨");
+        }).catch(() => {
+          fallbackCopyText(text);
+        });
+      } else {
+        fallbackCopyText(text);
+      }
+    }
+
+    function fallbackCopyText(text) {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.top = "-9999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showToast("Copied result to clipboard! 📋✨");
+      } catch (err) {
+        showToast("Please screenshot to share! 📸");
+      }
+      document.body.removeChild(textArea);
+    }
+
+    function showToast(msg) {
+      toastMsgEl.textContent = msg;
+      toastEl.classList.add('visible');
+      setTimeout(() => {
+        toastEl.classList.remove('visible');
+      }, 3000);
+    }
+
+    /* =========================================================
+       PURE JS & CANVAS CONFETTI GENERATOR (OFFLINE & STANDALONE)
+       ========================================================= */
+    function triggerConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#ff2a85', '#ffd000', '#00d2ff', '#7d3cfc', '#ff6b35', '#ffffff'];
+      const count = 90;
+
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height * 0.45,
+          vx: (Math.random() - 0.5) * 18,
+          vy: (Math.random() - 0.7) * 20,
+          size: Math.random() * 8 + 5,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          rotSpeed: (Math.random() - 0.5) * 12,
+          gravity: 0.45,
+          opacity: 1
+        });
+      }
+
+      let animationFrame;
+      function renderConfetti() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let activeCount = 0;
+
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += p.gravity;
+          p.rotation += p.rotSpeed;
+          p.opacity -= 0.007;
+
+          if (p.opacity > 0) {
+            activeCount++;
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rotation * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = Math.max(0, p.opacity);
+            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.7);
+            ctx.restore();
+          }
+        });
+
+        if (activeCount > 0) {
+          animationFrame = requestAnimationFrame(renderConfetti);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          cancelAnimationFrame(animationFrame);
+        }
+      }
+
+      renderConfetti();
+    }
+
+    /* =========================================================
+       AMBIENT BACKGROUND PARTICLES (CARNIVAL SPARKLES)
+       ========================================================= */
+    function initAmbientParticles() {
+      const canvas = document.getElementById('ambient-canvas');
+      const ctx = canvas.getContext('2d');
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      const sparkles = [];
+      const numSparkles = 28;
+
+      for (let i = 0; i < numSparkles; i++) {
+        sparkles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 2 + 1,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          alpha: Math.random() * 0.7 + 0.2,
+          color: Math.random() > 0.5 ? '#ffd000' : '#00d2ff'
+        });
+      }
+
+      function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        sparkles.forEach(s => {
+          s.x += s.vx;
+          s.y += s.vy;
+          if (s.x < 0) s.x = canvas.width;
+          if (s.x > canvas.width) s.x = 0;
+          if (s.y < 0) s.y = canvas.height;
+          if (s.y > canvas.height) s.y = 0;
+
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+          ctx.fillStyle = s.color;
+          ctx.globalAlpha = s.alpha;
+          ctx.fill();
+        });
+        requestAnimationFrame(loop);
+      }
+      loop();
+    }
+
+    /* =========================================================
+       EVENT LISTENERS ATTACHMENT
+       ========================================================= */
+    function setupEventListeners() {
+      // Homepage buttons
+      document.getElementById('btn-start-quiz').addEventListener('click', startQuiz);
+      
+      const modal = document.getElementById('how-modal');
+      document.getElementById('btn-how-works').addEventListener('click', () => {
+        modal.classList.add('open');
+      });
+      document.getElementById('modal-close').addEventListener('click', () => {
+        modal.classList.remove('open');
+      });
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('open');
+      });
+      document.getElementById('modal-start-btn').addEventListener('click', () => {
+        modal.classList.remove('open');
+        startQuiz();
+      });
+
+      // Quiz Navigation buttons
+      btnQuizContinue.addEventListener('click', goNextQuestion);
+      btnQuizBack.addEventListener('click', goPreviousQuestion);
+
+      // Locked Screen Reveal trigger
+      document.getElementById('btn-start-reveal').addEventListener('click', triggerSuspenseAndReveal);
+
+      // Result Screen buttons
+      document.getElementById('btn-download-result').addEventListener('click', downloadResultCard);
+      document.getElementById('btn-copy-result').addEventListener('click', copyResultToClipboard);
+
+      // Play Again & Let My Friend Try
+      document.getElementById('btn-play-again').addEventListener('click', startQuiz);
+      document.getElementById('btn-friend-try').addEventListener('click', () => {
+        state.currentQuestionIndex = 0;
+        state.userAnswers = [null, null, null, null, null, null, null];
+        showScreen('home');
+      });
+    }
+
+    /* =========================================================
+       INITIALIZE ON LOAD
+       ========================================================= */
+    window.addEventListener('DOMContentLoaded', () => {
+      initAmbientParticles();
+      setupEventListeners();
+      console.log('🎪 WHO AM I? University Carnival Quiz loaded successfully!');
+    });
+  </script>
+</body>
+</html>
